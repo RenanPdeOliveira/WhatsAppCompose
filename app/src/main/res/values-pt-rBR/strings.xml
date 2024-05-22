@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WhatsAppCompose</string>
+    <string name="email_text_input">Email</string>
+    <string name="password_text_input">Senha</string>
+    <string name="forgot_password_button">Esqueceu a senha? Clique aqui</string>
+    <string name="login_button">Entrar</string>
+    <string name="create_account_button">Criar uma conta</string>
+</resources>
