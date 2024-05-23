@@ -1,4 +1,4 @@
-package com.example.whatsappcompose
+package com.example.whatsappcompose.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

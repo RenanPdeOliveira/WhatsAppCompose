@@ -10,7 +10,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Auth
+        startDestination = Screens.Auth
     ) {
         authNavGraph(navController = navHostController)
     }
