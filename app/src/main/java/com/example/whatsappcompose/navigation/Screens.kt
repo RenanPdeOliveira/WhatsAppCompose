@@ -9,4 +9,6 @@ sealed interface Screens {
     data object LoginScreen: Screens
     @Serializable
     data object SignUpScreen: Screens
+    @Serializable
+    data object ForgotPasswordScreen: Screens
 }

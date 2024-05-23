@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
@@ -59,24 +60,27 @@ fun LoginScreen(
         if (isPasswordHidden) R.drawable.baseline_visibility_off else R.drawable.baseline_visibility_on
 
     Scaffold(
-
+        modifier = Modifier
+            .fillMaxSize()
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Image(
+                modifier = Modifier
+                    .size(150.dp),
                 painter = painterResource(id = R.drawable.logo_green),
                 contentDescription = ""
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth(),
                 value = email,
                 onValueChange = {
                     email = it
@@ -99,8 +103,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth(),
                 value = password,
                 onValueChange = {
                     password = it
@@ -137,7 +140,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
             TextButton(
                 onClick = {
-
+                    onEvent(UiEvent.Navigate(Screens.ForgotPasswordScreen))
                 }
             ) {
                 Text(text = stringResource(id = R.string.forgot_password_button))
@@ -146,14 +149,13 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 16.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
             Button(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth(),
                 onClick = {
 
                 }
@@ -167,8 +169,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth(),
                 onClick = {
                     onEvent(UiEvent.Navigate(Screens.SignUpScreen))
                 }
