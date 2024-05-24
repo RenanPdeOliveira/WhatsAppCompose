@@ -1,6 +1,6 @@
-package com.example.whatsappcompose.util
+package com.example.whatsappcompose.core.util
 
-import com.example.whatsappcompose.navigation.Screens
+import com.example.whatsappcompose.core.navigation.Screens
 
 sealed interface UiEvent {
     data class Navigate(val route: Screens): UiEvent

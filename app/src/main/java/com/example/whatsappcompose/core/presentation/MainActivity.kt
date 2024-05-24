@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.presentation
+package com.example.whatsappcompose.core.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.whatsappcompose.navigation.NavGraph
+import com.example.whatsappcompose.core.navigation.NavGraph
 import com.example.whatsappcompose.ui.theme.WhatsAppComposeTheme
 
 class MainActivity : ComponentActivity() {

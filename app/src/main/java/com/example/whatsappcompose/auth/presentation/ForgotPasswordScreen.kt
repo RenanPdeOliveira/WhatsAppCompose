@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.presentation
+package com.example.whatsappcompose.auth.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.ui.theme.DarkGreen
-import com.example.whatsappcompose.util.UiEvent
+import com.example.whatsappcompose.core.util.UiEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

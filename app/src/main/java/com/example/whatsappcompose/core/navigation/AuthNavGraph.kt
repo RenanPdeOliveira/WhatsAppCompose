@@ -1,12 +1,12 @@
-package com.example.whatsappcompose.navigation
+package com.example.whatsappcompose.core.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.whatsappcompose.presentation.ForgotPasswordScreen
-import com.example.whatsappcompose.presentation.LoginScreen
-import com.example.whatsappcompose.presentation.SignUpScreen
+import com.example.whatsappcompose.auth.presentation.ForgotPasswordScreen
+import com.example.whatsappcompose.auth.presentation.LoginScreen
+import com.example.whatsappcompose.auth.presentation.SignUpScreen
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController

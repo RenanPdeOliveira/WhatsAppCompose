@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.navigation
+package com.example.whatsappcompose.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -13,5 +13,6 @@ fun NavGraph(
         startDestination = Screens.Auth
     ) {
         authNavGraph(navController = navHostController)
+        mainNavGraph()
     }
 }
