@@ -7,6 +7,7 @@ firebaseAuth = "22.1.2"
 firebaseFirestore = "24.8.1"
 firebaseCloudStore = "20.2.1"
 navigationCompose = "2.8.0-alpha08"
+hilt = "2.44"
 serialization = "1.6.3"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -22,6 +23,8 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-authentication = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuth" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestore" }
 firebase-cloud-store = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseCloudStore" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -44,4 +47,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 fireBaseConfiguration = { id = "com.google.gms.google-services", version.ref = "firebase" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 

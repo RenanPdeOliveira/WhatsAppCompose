@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.fireBaseConfiguration)
     alias(libs.plugins.kotlinx.serialization)
+    id("kotlin-kapt")
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -52,6 +54,10 @@ android {
 }
 
 dependencies {
+
+    // Dagger-hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

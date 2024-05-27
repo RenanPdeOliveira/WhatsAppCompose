@@ -8,9 +8,16 @@ import com.example.whatsappcompose.core.domain.Result
 class LoginUseCase(
     private val repository: AuthRepository
 ) {
-    suspend fun emailAndPasswordUseCase(email: String, password: String): Result<AuthResult, AuthError> {
-        repository.login(email, password).collect {
-            return@collect Result.Success(data = it)
+    suspend operator fun invoke(email: String, password: String): Result<AuthResult, AuthError> {
+        if (email.isEmpty() && password.isEmpty()) {
+            return Result.Error(AuthError.Fields.EMAIL_PASSWORD_EMPTY)
         }
+        if (email.isEmpty()) {
+            return Result.Error(AuthError.Fields.EMAIL_EMPTY)
+        }
+        if (password.isEmpty()) {
+            return Result.Error(AuthError.Fields.PASSWORD_EMPTY)
+        }
+        return repository.login(email, password)
     }
 }
