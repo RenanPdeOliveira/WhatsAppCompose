@@ -4,8 +4,9 @@ import com.example.whatsappcompose.auth.domain.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
 import com.google.firebase.auth.AuthResult
 import com.example.whatsappcompose.core.domain.Result
+import javax.inject.Inject
 
-class LoginUseCase(
+class LoginUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
     suspend operator fun invoke(email: String, password: String): Result<AuthResult, AuthError> {
