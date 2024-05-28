@@ -6,18 +6,18 @@ import com.google.firebase.auth.AuthResult
 import com.example.whatsappcompose.core.domain.Result
 import javax.inject.Inject
 
-class LoginUseCase @Inject constructor(
+class SignInUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String, password: String): Result<AuthResult, AuthError> {
+    suspend operator fun invoke(email: String, password: String): Result<AuthResult, AuthError.SignIn> {
         if (email.isEmpty() && password.isEmpty()) {
-            return Result.Error(AuthError.Fields.EMAIL_PASSWORD_EMPTY)
+            return Result.Error(AuthError.SignIn.Fields.EMAIL_PASSWORD_EMPTY)
         }
         if (email.isEmpty()) {
-            return Result.Error(AuthError.Fields.EMAIL_EMPTY)
+            return Result.Error(AuthError.SignIn.Fields.EMAIL_EMPTY)
         }
         if (password.isEmpty()) {
-            return Result.Error(AuthError.Fields.PASSWORD_EMPTY)
+            return Result.Error(AuthError.SignIn.Fields.PASSWORD_EMPTY)
         }
         return repository.login(email, password)
     }

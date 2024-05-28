@@ -10,7 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.whatsappcompose.core.navigation.NavGraph
 import com.example.whatsappcompose.ui.theme.WhatsAppComposeTheme
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +26,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavGraph(navHostController = navController)
+                    val auth = FirebaseAuth.getInstance()
+                    NavGraph(
+                        navHostController = navController,
+                        auth = auth
+                    )
                 }
             }
         }

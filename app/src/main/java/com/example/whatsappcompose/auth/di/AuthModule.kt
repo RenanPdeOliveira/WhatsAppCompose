@@ -1,8 +1,7 @@
 package com.example.whatsappcompose.auth.di
 
-import com.example.whatsappcompose.auth.domain.repository.AuthRepository
-import com.example.whatsappcompose.auth.domain.use_cases.LoginUseCase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,5 +18,5 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun providesLoginUseCase(authRepository: AuthRepository) = LoginUseCase(authRepository)
+    fun provideFirebaseFirestore() = FirebaseFirestore.getInstance()
 }

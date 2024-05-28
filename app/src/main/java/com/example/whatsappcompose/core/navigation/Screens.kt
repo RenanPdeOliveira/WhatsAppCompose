@@ -8,7 +8,7 @@ sealed interface Screens {
     @Serializable
     data object Main: Screens
     @Serializable
-    data object LoginScreen: Screens
+    data object SignInScreen: Screens
     @Serializable
     data object SignUpScreen: Screens
     @Serializable

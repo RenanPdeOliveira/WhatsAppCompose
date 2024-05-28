@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.auth.presentation
+package com.example.whatsappcompose.auth.presentation.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,47 +18,63 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
+class SignUpViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
-) : ViewModel() {
+): ViewModel() {
 
-    private val _state = MutableStateFlow(LoginState())
+    private val _state = MutableStateFlow(SignUpState())
     val state = _state.asStateFlow()
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    private fun signIn(email: String, password: String) = viewModelScope.launch {
+    fun onEvent(event: SignUpEvents) {
+        when (event) {
+            SignUpEvents.OnNavigateBackClick -> {
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.PopBackStack)
+                }
+            }
+            is SignUpEvents.OnSignUpButtonClick -> {
+                signUp(name = event.name, email = event.email, password = event.password)
+            }
+        }
+    }
+
+    private fun signUp(name: String, email: String, password: String) = viewModelScope.launch {
         _state.update {
             it.copy(isLoading = true)
         }
         delay(2000L)
-        when (val result = authUseCase.loginUseCase(email, password)) {
+        when (val result = authUseCase.signUpUseCase(name, email, password)) {
             is Result.Error -> when (result.error) {
-                AuthError.Exceptions.KOTLIN_EXCEPTION -> {
+                AuthError.SignUp.Exceptions.KOTLIN_EXCEPTION -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "An unknown error occurred"))
                 }
-                AuthError.Exceptions.WEAK_PASSWORD_EXCEPTION -> {
+                AuthError.SignUp.Exceptions.WEAK_PASSWORD_EXCEPTION -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Weak password, try another one"))
                 }
-                AuthError.Exceptions.COLLISION_EXCEPTION -> {
+                AuthError.SignUp.Exceptions.COLLISION_EXCEPTION -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Email belongs to another user"))
                 }
-                AuthError.Exceptions.CREDENTIALS_EXCEPTION -> {
+                AuthError.SignUp.Exceptions.CREDENTIALS_EXCEPTION -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Invalid email, try another one"))
                 }
-                AuthError.Fields.EMAIL_EMPTY -> {
+                AuthError.SignUp.Fields.NAME_EMPTY -> {
+                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in name field"))
+                }
+                AuthError.SignUp.Fields.EMAIL_EMPTY -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in email field"))
                 }
-                AuthError.Fields.PASSWORD_EMPTY -> {
+                AuthError.SignUp.Fields.PASSWORD_EMPTY -> {
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in password field"))
                 }
-                AuthError.Fields.EMAIL_PASSWORD_EMPTY -> {
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in all fields"))
+                AuthError.SignUp.Fields.NAME_EMAIL_PASSWORD_EMPTY -> {
+                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in all field"))
                 }
             }
             is Result.Success -> {
-                _uiEvent.send(UiEvent.Navigate(Screens.MainScreen))
+                _uiEvent.send(UiEvent.Navigate(Screens.Main))
                 _state.update {
                     it.copy(isLoading = false)
                 }

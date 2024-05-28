@@ -58,6 +58,7 @@ dependencies {
     // Dagger-hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.android.navigation)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
