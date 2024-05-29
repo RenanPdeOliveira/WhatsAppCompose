@@ -12,4 +12,13 @@
     <string name="reset_password_button">Resetar senha</string>
     <string name="forgot_password_title">Esqueceu sua senha?</string>
     <string name="forgot_password_instructions">Preencha o campo acima com seu email para receber instruções em como criar uma nova senha</string>
+    <!-- SnackBar messages -->
+    <string name="snackbar_unknown_error">Um erro desconhecido ocorreu</string>
+    <string name="snackbar_weak_password">Senha fraca, tente outra novamente</string>
+    <string name="snackbar_collision_email">Email pertence a outro usuário</string>
+    <string name="snackbar_invalid_email">Email inválido, tentei utilizar outro</string>
+    <string name="snackbar_fill_in_all_fields">Preencha todos os campos</string>
+    <string name="snackbar_fill_in_name_fields">Preencha o campo nome</string>
+    <string name="snackbar_fill_in_email_fields">Preencha o campo email</string>
+    <string name="snackbar_fill_in_password_fields">Preencha o campo senha</string>
 </resources>

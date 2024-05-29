@@ -47,39 +47,43 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signIn(email: String, password: String) = viewModelScope.launch {
-        _state.update {
-            it.copy(isLoading = true)
-        }
-        delay(2000L)
+        _state.update { it.copy(isLoading = true) }
+        delay(1000L)
         when (val result = authUseCase.signInUseCase(email, password)) {
             is Result.Error -> when (result.error) {
                 AuthError.SignIn.Exceptions.KOTLIN_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "An unknown error occurred"))
                 }
                 AuthError.SignIn.Exceptions.WEAK_PASSWORD_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Weak password, try another one"))
                 }
                 AuthError.SignIn.Exceptions.COLLISION_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Email belongs to another user"))
                 }
                 AuthError.SignIn.Exceptions.CREDENTIALS_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Invalid email, try another one"))
                 }
                 AuthError.SignIn.Fields.EMAIL_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in email field"))
                 }
                 AuthError.SignIn.Fields.PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in password field"))
                 }
                 AuthError.SignIn.Fields.EMAIL_PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in all fields"))
                 }
             }
             is Result.Success -> {
                 _uiEvent.send(UiEvent.Navigate(Screens.Main))
-                _state.update {
-                    it.copy(isLoading = false)
-                }
+                delay(2000L)
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }

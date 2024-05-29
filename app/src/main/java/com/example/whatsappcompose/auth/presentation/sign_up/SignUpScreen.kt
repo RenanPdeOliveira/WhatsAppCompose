@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.whatsappcompose.R
+import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
 import kotlinx.coroutines.launch
@@ -75,6 +81,7 @@ fun SignUpScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
+    val state = viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -124,112 +131,116 @@ fun SignUpScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
+        if (!state.value.isLoading) {
+            Column(
                 modifier = Modifier
-                    .size(150.dp),
-                painter = painterResource(id = R.drawable.logo_green),
-                contentDescription = ""
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = name,
-                onValueChange = {
-                    name = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.name_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Person,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(150.dp),
+                    painter = painterResource(id = R.drawable.logo_green),
+                    contentDescription = ""
                 )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.email_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Email,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.password_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Lock,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-                trailingIcon = {
-                    IconButton(
-                        onClick = {
-                            isPasswordHidden = !isPasswordHidden
-                        }
-                    ) {
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = name,
+                    onValueChange = {
+                        name = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.name_text_input))
+                    },
+                    leadingIcon = {
                         Icon(
-                            painter = painterResource(id = isVisibly),
+                            imageVector = Icons.Rounded.Person,
+                            tint = DarkGreen,
                             contentDescription = ""
                         )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = email,
+                    onValueChange = {
+                        email = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.email_text_input))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Email,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.password_text_input))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Lock,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                isPasswordHidden = !isPasswordHidden
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = isVisibly),
+                                contentDescription = ""
+                            )
+                        }
+                    },
+                    visualTransformation = visualTransformation
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        viewModel.onEvent(SignUpEvents.OnSignUpButtonClick(name, email, password))
                     }
-                },
-                visualTransformation = visualTransformation
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    viewModel.onEvent(SignUpEvents.OnSignUpButtonClick(name, email, password))
+                ) {
+                    Text(text = stringResource(id = R.string.create_account_button))
                 }
-            ) {
-                Text(text = stringResource(id = R.string.create_account_button))
             }
+        } else {
+            LottieAuthLoading()
         }
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.whatsappcompose.R
+import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
 import kotlinx.coroutines.launch
@@ -68,6 +74,7 @@ fun SignInScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
+    val state = viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -96,123 +103,127 @@ fun SignInScreen(
             SnackbarHost(hostState = snackBarHost)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
+        if (!state.value.isLoading) {
+            Column(
                 modifier = Modifier
-                    .size(150.dp),
-                painter = painterResource(id = R.drawable.logo_green),
-                contentDescription = ""
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.email_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Email,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(150.dp),
+                    painter = painterResource(id = R.drawable.logo_green),
+                    contentDescription = ""
                 )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.password_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Lock,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
-                ),
-                trailingIcon = {
-                    IconButton(
-                        onClick = {
-                            isPasswordHidden = !isPasswordHidden
-                        }
-                    ) {
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = email,
+                    onValueChange = {
+                        email = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.email_text_input))
+                    },
+                    leadingIcon = {
                         Icon(
-                            painter = painterResource(id = isVisibly),
+                            imageVector = Icons.Rounded.Email,
                             tint = DarkGreen,
                             contentDescription = ""
                         )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.password_text_input))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Lock,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                isPasswordHidden = !isPasswordHidden
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = isVisibly),
+                                tint = DarkGreen,
+                                contentDescription = ""
+                            )
+                        }
+                    },
+                    visualTransformation = visualTransformation
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextButton(
+                    onClick = {
+                        viewModel.onEvent(SignInEvents.OnResetPasswordClick)
                     }
-                },
-                visualTransformation = visualTransformation
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextButton(
-                onClick = {
-                    viewModel.onEvent(SignInEvents.OnResetPasswordClick)
+                ) {
+                    Text(text = stringResource(id = R.string.forgot_password_button))
                 }
-            ) {
-                Text(text = stringResource(id = R.string.forgot_password_button))
             }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Button(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    viewModel.onEvent(SignInEvents.OnSignInButtonClick(email, password))
-                }
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
             ) {
-                Text(
-                    text = stringResource(id = R.string.login_button),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    viewModel.onEvent(SignInEvents.OnSignUpButtonClick)
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        viewModel.onEvent(SignInEvents.OnSignInButtonClick(email, password))
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.login_button),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
                 }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.create_account_button),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        viewModel.onEvent(SignInEvents.OnSignUpButtonClick)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.create_account_button),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
             }
+        } else {
+            LottieAuthLoading()
         }
     }
 }

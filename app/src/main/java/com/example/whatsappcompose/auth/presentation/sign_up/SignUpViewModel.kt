@@ -42,42 +42,47 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun signUp(name: String, email: String, password: String) = viewModelScope.launch {
-        _state.update {
-            it.copy(isLoading = true)
-        }
-        delay(2000L)
+        _state.update { it.copy(isLoading = true) }
+        delay(1000L)
         when (val result = authUseCase.signUpUseCase(name, email, password)) {
             is Result.Error -> when (result.error) {
                 AuthError.SignUp.Exceptions.KOTLIN_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "An unknown error occurred"))
                 }
                 AuthError.SignUp.Exceptions.WEAK_PASSWORD_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Weak password, try another one"))
                 }
                 AuthError.SignUp.Exceptions.COLLISION_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Email belongs to another user"))
                 }
                 AuthError.SignUp.Exceptions.CREDENTIALS_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Invalid email, try another one"))
                 }
                 AuthError.SignUp.Fields.NAME_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in name field"))
                 }
                 AuthError.SignUp.Fields.EMAIL_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in email field"))
                 }
                 AuthError.SignUp.Fields.PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in password field"))
                 }
                 AuthError.SignUp.Fields.NAME_EMAIL_PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in all field"))
                 }
             }
             is Result.Success -> {
                 _uiEvent.send(UiEvent.Navigate(Screens.Main))
-                _state.update {
-                    it.copy(isLoading = false)
-                }
+                delay(2000L)
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }

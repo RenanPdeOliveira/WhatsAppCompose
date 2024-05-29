@@ -55,6 +55,9 @@ android {
 
 dependencies {
 
+    // Lottie files
+    implementation(libs.lottie.files)
+
     // Dagger-hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
