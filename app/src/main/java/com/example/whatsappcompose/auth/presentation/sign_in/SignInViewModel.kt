@@ -2,11 +2,13 @@ package com.example.whatsappcompose.auth.presentation.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.whatsappcompose.R
 import com.example.whatsappcompose.auth.domain.AuthError
 import com.example.whatsappcompose.auth.domain.use_cases.AuthUseCase
 import com.example.whatsappcompose.core.domain.Result
 import com.example.whatsappcompose.core.navigation.Screens
 import com.example.whatsappcompose.core.util.UiEvent
+import com.example.whatsappcompose.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -35,11 +37,13 @@ class SignInViewModel @Inject constructor(
                     _uiEvent.send(UiEvent.Navigate(Screens.ForgotPasswordScreen))
                 }
             }
+
             SignInEvents.OnSignUpButtonClick -> {
                 viewModelScope.launch {
                     _uiEvent.send(UiEvent.Navigate(Screens.SignUpScreen))
                 }
             }
+
             is SignInEvents.OnSignInButtonClick -> {
                 signIn(email = event.email, password = event.password)
             }
@@ -53,33 +57,40 @@ class SignInViewModel @Inject constructor(
             is Result.Error -> when (result.error) {
                 AuthError.SignIn.Exceptions.KOTLIN_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "An unknown error occurred"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_unknown_error)))
                 }
+
                 AuthError.SignIn.Exceptions.WEAK_PASSWORD_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Weak password, try another one"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_weak_password)))
                 }
+
                 AuthError.SignIn.Exceptions.COLLISION_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Email belongs to another user"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_collision_email)))
                 }
+
                 AuthError.SignIn.Exceptions.CREDENTIALS_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Invalid email, try another one"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_invalid_email)))
                 }
+
                 AuthError.SignIn.Fields.EMAIL_EMPTY -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in email field"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_email_field)))
                 }
+
                 AuthError.SignIn.Fields.PASSWORD_EMPTY -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in password field"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_password_field)))
                 }
+
                 AuthError.SignIn.Fields.EMAIL_PASSWORD_EMPTY -> {
                     _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(message = "Fill in all fields"))
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_all_fields)))
                 }
             }
+
             is Result.Success -> {
                 _uiEvent.send(UiEvent.Navigate(Screens.Main))
                 delay(2000L)

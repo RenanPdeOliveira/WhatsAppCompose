@@ -17,7 +17,7 @@
     <string name="snackbar_collision_email">Email belongs to another user</string>
     <string name="snackbar_invalid_email">Invalid email, try another one</string>
     <string name="snackbar_fill_in_all_fields">Fill in all field</string>
-    <string name="snackbar_fill_in_name_fields">Fill in name field</string>
-    <string name="snackbar_fill_in_email_fields">Fill in email field</string>
-    <string name="snackbar_fill_in_password_fields">Fill in password field</string>
+    <string name="snackbar_fill_in_name_field">Fill in name field</string>
+    <string name="snackbar_fill_in_email_field">Fill in email field</string>
+    <string name="snackbar_fill_in_password_field">Fill in password field</string>
 </resources>

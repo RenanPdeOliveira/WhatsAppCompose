@@ -11,12 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -24,11 +22,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,31 +33,28 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     popBackStack: (UiEvent.PopBackStack) -> Unit,
-    viewModel: SignUpViewModel = hiltViewModel()
+    onEvent: (SignUpEvents) -> Unit,
+    uiEvent: Flow<UiEvent>,
+    state: State<SignUpState>
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var name by remember {
         mutableStateOf("")
     }
@@ -81,10 +75,10 @@ fun SignUpScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
-    val state = viewModel.state.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
+        uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> {
                     onNavigate(UiEvent.Navigate(event.route))
@@ -96,7 +90,7 @@ fun SignUpScreen(
 
                 is UiEvent.ShowSnackBar -> {
                     scope.launch {
-                        snackBarHost.showSnackbar(message = event.message)
+                        snackBarHost.showSnackbar(message = event.uiText.asString(context))
                     }
                 }
             }
@@ -110,24 +104,11 @@ fun SignUpScreen(
             SnackbarHost(hostState = snackBarHost)
         },
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.signup_toolbar_title))
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            viewModel.onEvent(SignUpEvents.OnNavigateBackClick)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            tint = DarkGreen,
-                            contentDescription = ""
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
+            TopAppBarNavigateBack(
+                title = stringResource(id = R.string.signup_toolbar_title),
+                onNavigationBack = {
+                    onEvent(SignUpEvents.OnNavigateBackClick)
+                }
             )
         }
     ) { innerPadding ->
@@ -233,7 +214,7 @@ fun SignUpScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        viewModel.onEvent(SignUpEvents.OnSignUpButtonClick(name, email, password))
+                        onEvent(SignUpEvents.OnSignUpButtonClick(name, email, password))
                     }
                 ) {
                     Text(text = stringResource(id = R.string.create_account_button))

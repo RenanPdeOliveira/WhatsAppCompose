@@ -11,17 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,15 +32,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whatsappcompose.R
+import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
     popBackStack: (UiEvent.PopBackStack) -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var email by remember {
         mutableStateOf("")
     }
@@ -53,24 +47,11 @@ fun ForgotPasswordScreen(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.forgot_password_toolbar_title))
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            popBackStack(UiEvent.PopBackStack)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            tint = DarkGreen,
-                            contentDescription = ""
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
+            TopAppBarNavigateBack(
+                title = stringResource(id = R.string.forgot_password_toolbar_title),
+                onNavigationBack = {
+                    popBackStack(UiEvent.PopBackStack)
+                }
             )
         }
     ) { innerPadding ->

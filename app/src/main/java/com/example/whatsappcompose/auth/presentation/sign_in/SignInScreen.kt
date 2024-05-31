@@ -24,7 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,21 +42,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: SignInViewModel = hiltViewModel()
+    onEvent: (SignInEvents) -> Unit,
+    uiEvent: Flow<UiEvent>,
+    state: State<SignInState>
 ) {
     var email by remember {
         mutableStateOf("")
@@ -74,10 +73,10 @@ fun SignInScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
-    val state = viewModel.state.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
+        uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> {
                     onNavigate(UiEvent.Navigate(event.route))
@@ -86,7 +85,7 @@ fun SignInScreen(
                 is UiEvent.ShowSnackBar -> {
                     scope.launch {
                         snackBarHost.showSnackbar(
-                            message = event.message
+                            message = event.uiText.asString(context)
                         )
                     }
                 }
@@ -181,7 +180,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(
                     onClick = {
-                        viewModel.onEvent(SignInEvents.OnResetPasswordClick)
+                        onEvent(SignInEvents.OnResetPasswordClick)
                     }
                 ) {
                     Text(text = stringResource(id = R.string.forgot_password_button))
@@ -198,7 +197,7 @@ fun SignInScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        viewModel.onEvent(SignInEvents.OnSignInButtonClick(email, password))
+                        onEvent(SignInEvents.OnSignInButtonClick(email, password))
                     }
                 ) {
                     Text(
@@ -212,7 +211,7 @@ fun SignInScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        viewModel.onEvent(SignInEvents.OnSignUpButtonClick)
+                        onEvent(SignInEvents.OnSignUpButtonClick)
                     }
                 ) {
                     Text(
