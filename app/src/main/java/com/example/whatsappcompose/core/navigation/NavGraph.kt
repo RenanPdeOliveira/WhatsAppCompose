@@ -15,6 +15,6 @@ fun NavGraph(
         startDestination = if (auth.currentUser != null) Screens.Main else Screens.Auth
     ) {
         authNavGraph(navController = navHostController)
-        mainNavGraph()
+        mainNavGraph(navController = navHostController)
     }
 }

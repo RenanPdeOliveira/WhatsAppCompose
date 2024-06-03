@@ -15,4 +15,6 @@ sealed interface Screens {
     data object ForgotPasswordScreen: Screens
     @Serializable
     data object MainScreen: Screens
+    @Serializable
+    data object ProfileScreen: Screens
 }

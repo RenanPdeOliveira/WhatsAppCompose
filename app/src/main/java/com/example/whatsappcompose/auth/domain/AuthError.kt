@@ -34,4 +34,14 @@ sealed interface AuthError: Error {
             NAME_EMAIL_PASSWORD_EMPTY
         }
     }
+
+    sealed interface ResetPassword: AuthError {
+        enum class Exceptions: ResetPassword {
+            KOTLIN_EXCEPTION
+        }
+
+        enum class Fields: ResetPassword {
+            EMAIL_EMPTY
+        }
+    }
 }

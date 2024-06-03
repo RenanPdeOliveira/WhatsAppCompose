@@ -76,6 +76,19 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun resetPassword(email: String): Result<Void, AuthError.ResetPassword.Exceptions> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val result = auth.sendPasswordResetEmail(email).await()
+                Result.Success(data = result)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                if (e is CancellationException) throw e
+                Result.Error(error = AuthError.ResetPassword.Exceptions.KOTLIN_EXCEPTION)
+            }
+        }
+    }
+
     private fun addUser(id: String, name: String, email: String) {
         val user = User(id, name, email)
         firestore.collection("users")

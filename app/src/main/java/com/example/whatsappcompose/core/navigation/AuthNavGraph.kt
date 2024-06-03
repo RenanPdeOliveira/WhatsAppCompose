@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.whatsappcompose.auth.presentation.reset_password.ForgotPasswordScreen
+import com.example.whatsappcompose.auth.presentation.reset_password.ResetPasswordViewModel
 import com.example.whatsappcompose.auth.presentation.sign_in.SignInScreen
 import com.example.whatsappcompose.auth.presentation.sign_in.SignInViewModel
 import com.example.whatsappcompose.auth.presentation.sign_up.SignUpScreen
@@ -46,10 +47,15 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
         composable<Screens.ForgotPasswordScreen> {
+            val viewModel = hiltViewModel<ResetPasswordViewModel>()
+            val state = viewModel.state.collectAsState()
             ForgotPasswordScreen(
                 popBackStack = {
                     navController.popBackStack()
-                }
+                },
+                onEvent = viewModel::onEvent,
+                uiEvent = viewModel.uiEvent,
+                state = state
             )
         }
     }

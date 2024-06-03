@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WhatsAppCompose</string>
+    <!-- Text Fields -->
     <string name="email_text_input">Email</string>
     <string name="name_text_input">Nome</string>
     <string name="password_text_input">Senha</string>
+    <!-- Buttons -->
     <string name="forgot_password_button">Esqueceu a senha? Clique aqui</string>
     <string name="login_button">Entrar</string>
     <string name="create_account_button">Criar uma conta</string>
+    <string name="reset_password_button">Resetar senha</string>
+    <string name="save_button">Salvar</string>
+    <string name="sign_out_button">Sair do app</string>
+    <!-- Texts -->
     <string name="signup_toolbar_title">Cadastro</string>
     <string name="forgot_password_toolbar_title">Resetar Senha</string>
-    <string name="reset_password_button">Resetar senha</string>
+    <string name="profile_toolbar_title">Perfil</string>
     <string name="forgot_password_title">Esqueceu sua senha?</string>
     <string name="forgot_password_instructions">Preencha o campo acima com seu email para receber instruções em como criar uma nova senha</string>
     <!-- SnackBar messages -->
@@ -21,4 +27,5 @@
     <string name="snackbar_fill_in_name_field">Preencha o campo nome</string>
     <string name="snackbar_fill_in_email_field">Preencha o campo email</string>
     <string name="snackbar_fill_in_password_field">Preencha o campo senha</string>
+    <string name="snackbar_check_email">Sucesso! Agora confira seu email</string>
 </resources>
