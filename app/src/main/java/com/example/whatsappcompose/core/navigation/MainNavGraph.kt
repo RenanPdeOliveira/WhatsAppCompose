@@ -1,12 +1,15 @@
 package com.example.whatsappcompose.core.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.whatsappcompose.main.presentation.MainScreen
-import com.example.whatsappcompose.main.presentation.ProfileScreen
+import com.example.whatsappcompose.main.presentation.profile.ProfileScreen
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun NavGraphBuilder.mainNavGraph(
     navController: NavController
 ) {
