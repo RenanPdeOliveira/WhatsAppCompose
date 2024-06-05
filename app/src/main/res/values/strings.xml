@@ -27,4 +27,7 @@
     <string name="snackbar_fill_in_email_field">Fill in email field</string>
     <string name="snackbar_fill_in_password_field">Fill in password field</string>
     <string name="snackbar_check_email">Success! Now check your email</string>
+    <string name="snackbar_sign_out_error">An error occurred when trying to sign out</string>
+    <string name="snackbar_save_changes_error">An error occurred when trying to save changes</string>
+    <string name="snackbar_photo_empty">Choose a photo</string>
 </resources>

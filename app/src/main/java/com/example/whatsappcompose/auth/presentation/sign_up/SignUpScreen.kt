@@ -93,6 +93,8 @@ fun SignUpScreen(
                         snackBarHost.showSnackbar(message = event.uiText.asString(context))
                     }
                 }
+
+                else -> Unit
             }
         }
     }

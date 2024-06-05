@@ -14,7 +14,6 @@ import com.example.whatsappcompose.core.navigation.NavGraph
 import com.example.whatsappcompose.ui.theme.WhatsAppComposeTheme
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

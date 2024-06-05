@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,26 +48,28 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
+import com.example.whatsappcompose.core.util.UiEvent
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
-    popBackStack: () -> Unit,
-    onNavigate: () -> Unit
+    popBackStack: (UiEvent.PopBackStack) -> Unit,
+    onNavigate: (UiEvent.Navigate) -> Unit,
+    onEvent: (ProfileEvents) -> Unit,
+    uiEvent: Flow<UiEvent>
 ) {
-    val auth = FirebaseAuth.getInstance()
     var name by remember {
         mutableStateOf("")
     }
     var photo by remember {
-        mutableStateOf("https://avatars.githubusercontent.com/u/14994036?v=4")
+        mutableStateOf("")
     }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -106,6 +109,33 @@ fun ProfileScreen(
             }
         }
     )
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        uiEvent.collect { event ->
+            when (event) {
+                UiEvent.PopBackStack -> {
+                    popBackStack(UiEvent.PopBackStack)
+                }
+
+                is UiEvent.Navigate -> {
+                    onNavigate(UiEvent.Navigate(event.route))
+                }
+
+                is UiEvent.ShowSnackBar -> {
+                    snackBarHost.showSnackbar(event.uiText.asString(context))
+                }
+
+                UiEvent.OpenGallery -> {
+                    if (!galleryPermission.status.isGranted) {
+                        permissionResultLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+                    } else {
+                        gallery.launch("image/*")
+                    }
+                }
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -116,7 +146,7 @@ fun ProfileScreen(
             TopAppBarNavigateBack(
                 title = stringResource(id = R.string.profile_toolbar_title),
                 onNavigationBack = {
-                    popBackStack()
+                    onEvent(ProfileEvents.OnNavigateBackClick)
                 }
             )
         }
@@ -147,11 +177,7 @@ fun ProfileScreen(
                         .clip(CircleShape)
                         .background(Color.Black),
                     onClick = {
-                        if (!galleryPermission.status.isGranted) {
-                            permissionResultLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-                        } else {
-                            gallery.launch("image/*")
-                        }
+                        onEvent(ProfileEvents.OnPhotoButtonClick)
                     }
                 ) {
                     Icon(
@@ -197,7 +223,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 onClick = {
-                    TODO()
+                    onEvent(ProfileEvents.OnSaveButtonClick(name, photo))
                 }
             ) {
                 Text(text = stringResource(id = R.string.save_button))
@@ -207,8 +233,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 onClick = {
-                    auth.signOut()
-                    onNavigate()
+                    onEvent(ProfileEvents.OnSignOutButtonClick)
                 }
             ) {
                 Text(text = stringResource(id = R.string.sign_out_button))
