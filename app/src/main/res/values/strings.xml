@@ -30,4 +30,6 @@
     <string name="snackbar_sign_out_error">An error occurred when trying to sign out</string>
     <string name="snackbar_save_changes_error">An error occurred when trying to save changes</string>
     <string name="snackbar_photo_empty">Choose a photo</string>
+    <string name="snackbar_user_data_error">Could not load user data</string>
+    <string name="snackbar_user_data_success">User data loaded</string>
 </resources>

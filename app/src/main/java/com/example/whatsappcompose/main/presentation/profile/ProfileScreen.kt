@@ -31,6 +31,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +48,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
+import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.core.util.UiEvent
+import com.example.whatsappcompose.main.presentation.main.UserState
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -63,13 +66,16 @@ fun ProfileScreen(
     popBackStack: (UiEvent.PopBackStack) -> Unit,
     onNavigate: (UiEvent.Navigate) -> Unit,
     onEvent: (ProfileEvents) -> Unit,
-    uiEvent: Flow<UiEvent>
+    uiEvent: Flow<UiEvent>,
+    state: State<UserState>,
+    nameState: String,
+    photoState: String
 ) {
     var name by remember {
-        mutableStateOf("")
+        mutableStateOf(nameState)
     }
     var photo by remember {
-        mutableStateOf("")
+        mutableStateOf(photoState)
     }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -136,109 +142,113 @@ fun ProfileScreen(
         }
     }
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHost)
-        },
-        topBar = {
-            TopAppBarNavigateBack(
-                title = stringResource(id = R.string.profile_toolbar_title),
-                onNavigationBack = {
-                    onEvent(ProfileEvents.OnNavigateBackClick)
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
+    if (!state.value.isLoading) {
+        Scaffold(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(200.dp)
-                        .clip(CircleShape),
-                    painter = painter,
-                    contentDescription = ""
+                .fillMaxSize(),
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHost)
+            },
+            topBar = {
+                TopAppBarNavigateBack(
+                    title = stringResource(id = R.string.profile_toolbar_title),
+                    onNavigationBack = {
+                        onEvent(ProfileEvents.OnNavigateBackClick)
+                    }
                 )
-                IconButton(
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(
                     modifier = Modifier
-                        .offset(70.dp, 70.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black),
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .clip(CircleShape),
+                        painter = painter,
+                        contentDescription = ""
+                    )
+                    IconButton(
+                        modifier = Modifier
+                            .offset(70.dp, 70.dp)
+                            .clip(CircleShape)
+                            .background(Color.Black),
+                        onClick = {
+                            onEvent(ProfileEvents.OnPhotoButtonClick)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Person,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = name,
+                    onValueChange = {
+                        name = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.name_text_input))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Person,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    )
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     onClick = {
-                        onEvent(ProfileEvents.OnPhotoButtonClick)
+                        onEvent(ProfileEvents.OnSaveButtonClick(name, photo))
                     }
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Person,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
+                    Text(text = stringResource(id = R.string.save_button))
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        onEvent(ProfileEvents.OnSignOutButtonClick)
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.sign_out_button))
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = name,
-                onValueChange = {
-                    name = it
-                },
-                label = {
-                    Text(text = stringResource(id = R.string.name_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Person,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                )
-            )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    onEvent(ProfileEvents.OnSaveButtonClick(name, photo))
-                }
-            ) {
-                Text(text = stringResource(id = R.string.save_button))
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    onEvent(ProfileEvents.OnSignOutButtonClick)
-                }
-            ) {
-                Text(text = stringResource(id = R.string.sign_out_button))
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+    } else {
+        LottieAuthLoading()
     }
 }

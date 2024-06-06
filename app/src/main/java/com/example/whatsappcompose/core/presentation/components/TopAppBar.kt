@@ -2,7 +2,6 @@ package com.example.whatsappcompose.core.presentation.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -12,6 +11,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.graphics.Color
+import coil.compose.AsyncImage
 import com.example.whatsappcompose.ui.theme.DarkGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +54,7 @@ fun TopAppBarNavigateBack(
 @Composable
 fun TopAppBarActionMenu(
     title: String,
+    photo: String,
     onProfile: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -69,8 +70,8 @@ fun TopAppBarActionMenu(
                     onProfile()
                 }
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Person,
+                AsyncImage(
+                    model = photo,
                     contentDescription = ""
                 )
             }

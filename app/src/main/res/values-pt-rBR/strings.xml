@@ -31,4 +31,6 @@
     <string name="snackbar_sign_out_error">Um erro ocorreu ao tentar deslogar</string>
     <string name="snackbar_save_changes_error">Um erro ocorreu ao tentar salvar alterações</string>
     <string name="snackbar_photo_empty">Escolha uma foto</string>
+    <string name="snackbar_user_data_error">Dados de usuário não carregados</string>
+    <string name="snackbar_user_data_success">Dados de usuário carregados</string>
 </resources>
