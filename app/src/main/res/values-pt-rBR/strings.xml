@@ -28,4 +28,7 @@
     <string name="snackbar_fill_in_email_field">Preencha o campo email</string>
     <string name="snackbar_fill_in_password_field">Preencha o campo senha</string>
     <string name="snackbar_check_email">Sucesso! Agora confira seu email</string>
+    <string name="snackbar_sign_out_error">Um erro ocorreu ao tentar deslogar</string>
+    <string name="snackbar_save_changes_error">Um erro ocorreu ao tentar salvar alterações</string>
+    <string name="snackbar_photo_empty">Escolha uma foto</string>
 </resources>
