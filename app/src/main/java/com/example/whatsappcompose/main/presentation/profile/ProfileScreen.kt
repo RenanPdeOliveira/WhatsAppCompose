@@ -49,8 +49,10 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ShowAlertDialog
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.core.util.UiEvent
+import com.example.whatsappcompose.core.util.UiText
 import com.example.whatsappcompose.main.presentation.main.UserState
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -87,6 +89,9 @@ fun ProfileScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
+    var isDialogOpen by remember {
+        mutableStateOf(false)
+    }
     val galleryPermission =
         rememberPermissionState(permission = Manifest.permission.READ_MEDIA_IMAGES)
     val permissionResultLauncher = rememberLauncherForActivityResult(
@@ -94,11 +99,15 @@ fun ProfileScreen(
         onResult = { isGranted ->
             if (isGranted) {
                 scope.launch {
-                    snackBarHost.showSnackbar("Permissao aprovada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_permission_granted).toString()
+                    )
                 }
             } else {
                 scope.launch {
-                    snackBarHost.showSnackbar("Permissao negada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_permission_not_granted).toString()
+                    )
                 }
             }
         }
@@ -110,7 +119,9 @@ fun ProfileScreen(
                 photo = uri.toString()
             } else {
                 scope.launch {
-                    snackBarHost.showSnackbar("Nenhuma imagem selecionada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_gallery_empty_photo).toString()
+                    )
                 }
             }
         }
@@ -129,6 +140,10 @@ fun ProfileScreen(
 
                 is UiEvent.ShowSnackBar -> {
                     snackBarHost.showSnackbar(event.uiText.asString(context))
+                }
+
+                is UiEvent.ShowDialog -> {
+                    isDialogOpen = event.isOpen
                 }
 
                 UiEvent.OpenGallery -> {
@@ -182,14 +197,14 @@ fun ProfileScreen(
                         modifier = Modifier
                             .offset(70.dp, 70.dp)
                             .clip(CircleShape)
-                            .background(Color.Black),
+                            .background(DarkGreen),
                         onClick = {
                             onEvent(ProfileEvents.OnPhotoButtonClick)
                         }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Person,
-                            tint = DarkGreen,
+                            tint = Color.White,
                             contentDescription = ""
                         )
                     }
@@ -240,13 +255,27 @@ fun ProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        onEvent(ProfileEvents.OnSignOutButtonClick)
+                        onEvent(ProfileEvents.OnSignOutButtonClick())
                     }
                 ) {
                     Text(text = stringResource(id = R.string.sign_out_button))
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
+        }
+        if (isDialogOpen) {
+            ShowAlertDialog(
+                title = UiText.StringResource(R.string.dialog_title_sign_out),
+                text = UiText.StringResource(R.string.dialog_text_sign_out),
+                positiveText = UiText.StringResource(R.string.dialog_positive_text_sign_out),
+                negativeText = UiText.StringResource(R.string.dialog_negative_text_sign_out),
+                onPositiveButton = {
+                    onEvent(ProfileEvents.PositiveDialogButton())
+                },
+                onNegativeButton = {
+                    onEvent(ProfileEvents.NegativeDialogButton())
+                }
+            )
         }
     } else {
         LottieAuthLoading()

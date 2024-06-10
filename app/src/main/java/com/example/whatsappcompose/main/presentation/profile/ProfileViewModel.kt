@@ -38,8 +38,10 @@ class ProfileViewModel @Inject constructor(
                 saveChanges(event.name, event.photo)
             }
 
-            ProfileEvents.OnSignOutButtonClick -> {
-                signOut()
+            is ProfileEvents.OnSignOutButtonClick -> {
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.ShowDialog(event.open))
+                }
             }
 
             ProfileEvents.OnNavigateBackClick -> {
@@ -53,13 +55,27 @@ class ProfileViewModel @Inject constructor(
                     _uiEvent.send(UiEvent.OpenGallery)
                 }
             }
+
+            is ProfileEvents.PositiveDialogButton -> {
+                signOut(event.close)
+            }
+
+            is ProfileEvents.NegativeDialogButton -> {
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.ShowDialog(event.close))
+                }
+            }
         }
     }
 
-    private fun signOut() = viewModelScope.launch {
+    private fun signOut(close: Boolean) = viewModelScope.launch {
+        _uiEvent.send(UiEvent.ShowDialog(close))
+        _state.update { it.copy(isLoading = true) }
+        delay(1000L)
         when (val result = mainUseCases.signOutUseCase()) {
             is Result.Error -> when (result.error) {
                 ProfileError.Exception.KOTLIN_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_sign_out_error)))
                 }
 
@@ -68,13 +84,15 @@ class ProfileViewModel @Inject constructor(
 
             is Result.Success -> {
                 _uiEvent.send(UiEvent.Navigate(Screens.Auth))
+                delay(2000L)
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }
 
     private fun saveChanges(name: String, photo: String) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
-        delay(2000L)
+        delay(1000L)
         mainUseCases.profileChangesUseCase(name, photo).collect { result ->
             when (result) {
                 is Result.Error -> when (result.error) {
@@ -95,14 +113,17 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
-                    _state.update { it.copy(
-                        user = User(
-                            name = result.data.name,
-                            photo = result.data.photo
-                        ),
-                        isLoading = false
-                    ) }
                     _uiEvent.send(UiEvent.Navigate(Screens.MainScreen))
+                    delay(1000L)
+                    _state.update {
+                        it.copy(
+                            user = User(
+                                name = result.data.name,
+                                photo = result.data.photo
+                            ),
+                            isLoading = false
+                        )
+                    }
                 }
             }
         }
