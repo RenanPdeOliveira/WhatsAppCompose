@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -37,7 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ButtonOnceClick
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ForgotPasswordScreen(
-    popBackStack: (UiEvent.PopBackStack) -> Unit,
+    onNavigateBack: (UiEvent.PopBackStack) -> Unit,
     onEvent: (ResetPasswordEvents) -> Unit,
     uiEvent: Flow<UiEvent>,
     state: State<ResetPasswordState>
@@ -61,7 +61,7 @@ fun ForgotPasswordScreen(
         uiEvent.collect { event ->
             when (event) {
                 UiEvent.PopBackStack -> {
-                    popBackStack(UiEvent.PopBackStack)
+                    onNavigateBack(UiEvent.PopBackStack)
                 }
 
                 is UiEvent.ShowSnackBar -> {
@@ -137,7 +137,7 @@ fun ForgotPasswordScreen(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {

@@ -38,8 +38,8 @@ fun NavGraphBuilder.authNavGraph(
                 onNavigate = {
                     navController.navigate(it.route)
                 },
-                popBackStack = {
-                    navController.popBackStack()
+                onNavigateBack = {
+                    navController.navigateUp()
                 },
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent,
@@ -50,8 +50,8 @@ fun NavGraphBuilder.authNavGraph(
             val viewModel = hiltViewModel<ResetPasswordViewModel>()
             val state = viewModel.state.collectAsState()
             ForgotPasswordScreen(
-                popBackStack = {
-                    navController.popBackStack()
+                onNavigateBack = {
+                    navController.navigateUp()
                 },
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent,

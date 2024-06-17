@@ -1,8 +1,8 @@
 package com.example.whatsappcompose.main.data.repository
 
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
-import com.example.whatsappcompose.main.domain.MainError
+import com.example.whatsappcompose.main.domain.util.MainError
 import com.example.whatsappcompose.main.domain.repository.MainRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

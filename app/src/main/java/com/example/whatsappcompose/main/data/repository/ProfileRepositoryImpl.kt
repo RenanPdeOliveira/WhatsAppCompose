@@ -1,9 +1,9 @@
 package com.example.whatsappcompose.main.data.repository
 
 import androidx.core.net.toUri
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
-import com.example.whatsappcompose.main.domain.ProfileError
+import com.example.whatsappcompose.main.domain.util.ProfileError
 import com.example.whatsappcompose.main.domain.repository.ProfileRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

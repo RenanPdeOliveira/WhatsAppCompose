@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -48,7 +47,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ButtonOnceClick
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.core.presentation.components.ShowAlertDialog
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.core.util.UiEvent
@@ -65,8 +65,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
-    popBackStack: (UiEvent.PopBackStack) -> Unit,
     onNavigate: (UiEvent.Navigate) -> Unit,
+    onNavigateBack: (UiEvent.PopBackStack) -> Unit,
     onEvent: (ProfileEvents) -> Unit,
     uiEvent: Flow<UiEvent>,
     state: State<UserState>,
@@ -131,7 +131,7 @@ fun ProfileScreen(
         uiEvent.collect { event ->
             when (event) {
                 UiEvent.PopBackStack -> {
-                    popBackStack(UiEvent.PopBackStack)
+                    onNavigateBack(UiEvent.PopBackStack)
                 }
 
                 is UiEvent.Navigate -> {
@@ -241,7 +241,7 @@ fun ProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
@@ -251,7 +251,7 @@ fun ProfileScreen(
                     Text(text = stringResource(id = R.string.save_button))
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {

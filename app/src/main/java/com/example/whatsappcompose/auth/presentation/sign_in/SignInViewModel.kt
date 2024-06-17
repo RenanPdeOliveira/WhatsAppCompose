@@ -3,9 +3,9 @@ package com.example.whatsappcompose.auth.presentation.sign_in
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.auth.domain.AuthError
+import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.use_cases.AuthUseCase
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.navigation.Screens
 import com.example.whatsappcompose.core.util.UiEvent
 import com.example.whatsappcompose.core.util.UiText

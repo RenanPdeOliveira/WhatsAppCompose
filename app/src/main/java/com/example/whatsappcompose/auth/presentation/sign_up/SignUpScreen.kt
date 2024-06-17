@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -41,7 +40,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ButtonOnceClick
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
 import kotlinx.coroutines.flow.Flow
@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignUpScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
-    popBackStack: (UiEvent.PopBackStack) -> Unit,
+    onNavigateBack: (UiEvent.PopBackStack) -> Unit,
     onEvent: (SignUpEvents) -> Unit,
     uiEvent: Flow<UiEvent>,
     state: State<SignUpState>
@@ -85,7 +85,7 @@ fun SignUpScreen(
                 }
 
                 UiEvent.PopBackStack -> {
-                    popBackStack(UiEvent.PopBackStack)
+                    onNavigateBack(UiEvent.PopBackStack)
                 }
 
                 is UiEvent.ShowSnackBar -> {
@@ -212,7 +212,7 @@ fun SignUpScreen(
                     visualTransformation = visualTransformation
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {

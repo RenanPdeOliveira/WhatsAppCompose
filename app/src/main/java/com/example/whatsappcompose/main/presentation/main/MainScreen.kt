@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.core.presentation.components.TopAppBarActionMenu
 import com.example.whatsappcompose.core.util.UiEvent
 import kotlinx.coroutines.flow.Flow

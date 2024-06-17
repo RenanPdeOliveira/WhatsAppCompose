@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -21,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -43,7 +41,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.auth.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ButtonOnceClick
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.TextButtonOnceClick
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.example.whatsappcompose.core.util.UiEvent
 import kotlinx.coroutines.flow.Flow
@@ -178,7 +178,7 @@ fun SignInScreen(
                     visualTransformation = visualTransformation
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                TextButton(
+                TextButtonOnceClick(
                     onClick = {
                         onEvent(SignInEvents.OnResetPasswordClick)
                     }
@@ -194,7 +194,7 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
@@ -208,7 +208,7 @@ fun SignInScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(
+                ButtonOnceClick(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {

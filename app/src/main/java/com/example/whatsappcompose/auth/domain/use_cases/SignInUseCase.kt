@@ -1,9 +1,9 @@
 package com.example.whatsappcompose.auth.domain.use_cases
 
-import com.example.whatsappcompose.auth.domain.AuthError
+import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
 import com.google.firebase.auth.AuthResult
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(

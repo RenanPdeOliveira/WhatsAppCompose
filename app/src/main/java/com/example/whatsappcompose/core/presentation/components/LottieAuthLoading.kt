@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.auth.presentation.components
+package com.example.whatsappcompose.core.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

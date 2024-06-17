@@ -38,11 +38,11 @@ fun NavGraphBuilder.mainNavGraph(
             val viewModel = hiltViewModel<ProfileViewModel>()
             val state = viewModel.state.collectAsState()
             ProfileScreen(
-                popBackStack = {
-                    navController.popBackStack()
-                },
                 onNavigate = { uiEvent ->
                     navController.navigate(uiEvent.route)
+                },
+                onNavigateBack = {
+                    navController.navigateUp()
                 },
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent,

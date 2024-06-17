@@ -1,9 +1,9 @@
 package com.example.whatsappcompose.auth.data.repository
 
 import android.util.Log
-import com.example.whatsappcompose.auth.domain.AuthError
+import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth

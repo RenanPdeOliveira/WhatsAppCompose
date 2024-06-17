@@ -3,12 +3,12 @@ package com.example.whatsappcompose.main.presentation.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
 import com.example.whatsappcompose.core.navigation.Screens
 import com.example.whatsappcompose.core.util.UiEvent
 import com.example.whatsappcompose.core.util.UiText
-import com.example.whatsappcompose.main.domain.ProfileError
+import com.example.whatsappcompose.main.domain.util.ProfileError
 import com.example.whatsappcompose.main.domain.use_cases.MainUseCases
 import com.example.whatsappcompose.main.presentation.main.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel

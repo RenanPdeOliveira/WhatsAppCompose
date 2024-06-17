@@ -1,6 +1,6 @@
-package com.example.whatsappcompose.auth.domain
+package com.example.whatsappcompose.auth.domain.util
 
-import com.example.whatsappcompose.core.domain.Error
+import com.example.whatsappcompose.core.domain.util.Error
 
 sealed interface AuthError: Error {
 

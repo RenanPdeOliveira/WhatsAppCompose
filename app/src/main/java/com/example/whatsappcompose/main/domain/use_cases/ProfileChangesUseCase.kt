@@ -1,8 +1,8 @@
 package com.example.whatsappcompose.main.domain.use_cases
 
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
-import com.example.whatsappcompose.main.domain.ProfileError
+import com.example.whatsappcompose.main.domain.util.ProfileError
 import com.example.whatsappcompose.main.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
