@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
     fun getUserData(): Flow<Result<User, MainError.Exception>>
+    fun getUsers(): Flow<Result<List<User>, MainError.Exception>>
 }

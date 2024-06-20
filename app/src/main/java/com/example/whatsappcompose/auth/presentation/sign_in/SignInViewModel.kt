@@ -55,6 +55,21 @@ class SignInViewModel @Inject constructor(
         delay(1000L)
         when (val result = authUseCase.signInUseCase(email, password)) {
             is Result.Error -> when (result.error) {
+                AuthError.SignIn.Fields.EMAIL_PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_all_fields)))
+                }
+
+                AuthError.SignIn.Fields.EMAIL_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_email_field)))
+                }
+
+                AuthError.SignIn.Fields.PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_password_field)))
+                }
+
                 AuthError.SignIn.Exceptions.KOTLIN_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_unknown_error)))
@@ -73,21 +88,6 @@ class SignInViewModel @Inject constructor(
                 AuthError.SignIn.Exceptions.CREDENTIALS_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_invalid_email)))
-                }
-
-                AuthError.SignIn.Fields.EMAIL_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_email_field)))
-                }
-
-                AuthError.SignIn.Fields.PASSWORD_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_password_field)))
-                }
-
-                AuthError.SignIn.Fields.EMAIL_PASSWORD_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_all_fields)))
                 }
             }
 

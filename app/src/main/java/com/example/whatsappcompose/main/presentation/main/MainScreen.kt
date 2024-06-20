@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
 import com.example.whatsappcompose.core.presentation.components.TopAppBarActionMenu
 import com.example.whatsappcompose.core.util.UiEvent
+import com.example.whatsappcompose.main.presentation.components.TabLayout
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -72,9 +73,9 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
-
+                TabLayout(state.value.users)
             }
         }
     } else {

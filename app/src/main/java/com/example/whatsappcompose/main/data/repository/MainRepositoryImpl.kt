@@ -1,5 +1,6 @@
 package com.example.whatsappcompose.main.data.repository
 
+import android.util.Log
 import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
 import com.example.whatsappcompose.main.domain.util.MainError
@@ -33,6 +34,30 @@ class MainRepositoryImpl @Inject constructor(
                         trySend(Result.Error(error = MainError.Exception.KOTLIN_EXCEPTION))
                     }
             }
+            awaitClose {
+                close()
+            }
+        }
+    }
+
+    override fun getUsers(): Flow<Result<List<User>, MainError.Exception>> {
+        return callbackFlow {
+            val users = mutableListOf<User>()
+            db.collection("users")
+                .addSnapshotListener { value, error ->
+                    error?.let {
+                        trySend(Result.Error(error = MainError.Exception.KOTLIN_EXCEPTION))
+                    }
+                    val documents = value?.documents
+                    documents?.forEach {
+                        val user = it.toObject(User::class.java)
+                        if (user != null) {
+                            Log.d("userData", user.id)
+                            users.add(user)
+                        }
+                    }
+                    trySend(Result.Success(data = users))
+                }
             awaitClose {
                 close()
             }

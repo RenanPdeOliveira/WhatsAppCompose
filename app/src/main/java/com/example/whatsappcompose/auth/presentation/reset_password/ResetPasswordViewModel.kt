@@ -48,14 +48,14 @@ class ResetPasswordViewModel @Inject constructor(
         delay(1000L)
         when (val result = resetPasswordUseCase(email)) {
             is Result.Error -> when (result.error) {
-                AuthError.ResetPassword.Exceptions.KOTLIN_EXCEPTION -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_unknown_error)))
-                }
-
                 AuthError.ResetPassword.Fields.EMAIL_EMPTY -> {
                     _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_fill_in_email_field)))
+                }
+
+                AuthError.ResetPassword.Exceptions.KOTLIN_EXCEPTION -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_unknown_error)))
                 }
             }
 

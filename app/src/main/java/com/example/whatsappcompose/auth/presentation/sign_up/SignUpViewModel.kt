@@ -49,6 +49,26 @@ class SignUpViewModel @Inject constructor(
         delay(1000L)
         when (val result = authUseCase.signUpUseCase(name, email, password)) {
             is Result.Error -> when (result.error) {
+                AuthError.SignUp.Fields.NAME_EMAIL_PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_all_fields)))
+                }
+
+                AuthError.SignUp.Fields.NAME_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_name_field)))
+                }
+
+                AuthError.SignUp.Fields.EMAIL_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_email_field)))
+                }
+
+                AuthError.SignUp.Fields.PASSWORD_EMPTY -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_password_field)))
+                }
+
                 AuthError.SignUp.Exceptions.KOTLIN_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_unknown_error)))
@@ -67,26 +87,6 @@ class SignUpViewModel @Inject constructor(
                 AuthError.SignUp.Exceptions.CREDENTIALS_EXCEPTION -> {
                     _state.update { it.copy(isLoading = false) }
                     _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_invalid_email)))
-                }
-
-                AuthError.SignUp.Fields.NAME_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_name_field)))
-                }
-
-                AuthError.SignUp.Fields.EMAIL_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_email_field)))
-                }
-
-                AuthError.SignUp.Fields.PASSWORD_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_password_field)))
-                }
-
-                AuthError.SignUp.Fields.NAME_EMAIL_PASSWORD_EMPTY -> {
-                    _state.update { it.copy(isLoading = false) }
-                    _uiEvent.send(UiEvent.ShowSnackBar(uiText = UiText.StringResource(R.string.snackbar_fill_in_all_fields)))
                 }
             }
 

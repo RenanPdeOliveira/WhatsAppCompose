@@ -96,11 +96,6 @@ class ProfileViewModel @Inject constructor(
         mainUseCases.profileChangesUseCase(name, photo).collect { result ->
             when (result) {
                 is Result.Error -> when (result.error) {
-                    ProfileError.Exception.KOTLIN_EXCEPTION -> {
-                        _state.update { it.copy(isLoading = false) }
-                        _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_save_changes_error)))
-                    }
-
                     ProfileError.Fields.NAME_EMPTY -> {
                         _state.update { it.copy(isLoading = false) }
                         _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_fill_in_name_field)))
@@ -109,6 +104,11 @@ class ProfileViewModel @Inject constructor(
                     ProfileError.Fields.PHOTO_EMPTY -> {
                         _state.update { it.copy(isLoading = false) }
                         _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_photo_empty)))
+                    }
+
+                    ProfileError.Exception.KOTLIN_EXCEPTION -> {
+                        _state.update { it.copy(isLoading = false) }
+                        _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_save_changes_error)))
                     }
                 }
 

@@ -32,7 +32,9 @@ class MainViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+        _state.update { it.copy(isLoading = true) }
         getUserData()
+        getUsers()
     }
 
     fun onEvent(event: MainEvents) {
@@ -46,13 +48,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getUserData() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
-        delay(2000L)
         repository.getUserData().collect { result ->
             when (result) {
                 is Result.Error -> when (result.error) {
                     MainError.Exception.KOTLIN_EXCEPTION -> {
-                        _state.update { it.copy(isLoading = false) }
                         _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_user_data_error)))
                     }
                 }
@@ -63,11 +62,32 @@ class MainViewModel @Inject constructor(
                             user = User(
                                 name = result.data.name,
                                 photo = result.data.photo
-                            ),
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getUsers() = viewModelScope.launch {
+        repository.getUsers().collect { result ->
+            when (result) {
+                is Result.Error -> when (result.error) {
+                    MainError.Exception.KOTLIN_EXCEPTION -> {
+                        _state.update { it.copy(isLoading = false) }
+                        _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_user_data_error)))
+                    }
+                }
+
+                is Result.Success -> {
+                    delay(2000L)
+                    _state.update {
+                        it.copy(
+                            users = result.data,
                             isLoading = false
                         )
                     }
-                    _uiEvent.send(UiEvent.ShowSnackBar(UiText.StringResource(R.string.snackbar_user_data_success)))
                 }
             }
         }

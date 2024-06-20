@@ -18,7 +18,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class ProfileRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
+    private val db: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : ProfileRepository {
     override suspend fun signOut(): Result<Unit, ProfileError.Exception> {
@@ -53,7 +53,7 @@ class ProfileRepositoryImpl @Inject constructor(
                                     "name" to name,
                                     "photo" to uri.toString()
                                 )
-                                firestore
+                                db
                                     .collection("users")
                                     .document(id)
                                     .update(data)
