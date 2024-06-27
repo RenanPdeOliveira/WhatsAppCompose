@@ -1,6 +1,5 @@
 package com.example.whatsappcompose.main.data.repository
 
-import android.util.Log
 import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
 import com.example.whatsappcompose.main.domain.util.MainError
@@ -42,6 +41,7 @@ class MainRepositoryImpl @Inject constructor(
 
     override fun getUsers(): Flow<Result<List<User>, MainError.Exception>> {
         return callbackFlow {
+            val id = auth.currentUser?.uid
             val users = mutableListOf<User>()
             db.collection("users")
                 .addSnapshotListener { value, error ->
@@ -51,8 +51,7 @@ class MainRepositoryImpl @Inject constructor(
                     val documents = value?.documents
                     documents?.forEach {
                         val user = it.toObject(User::class.java)
-                        if (user != null) {
-                            Log.d("userData", user.id)
+                        if (user != null && id != user.id) {
                             users.add(user)
                         }
                     }
