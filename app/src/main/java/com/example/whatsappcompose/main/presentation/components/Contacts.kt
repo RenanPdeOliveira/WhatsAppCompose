@@ -1,6 +1,7 @@
 package com.example.whatsappcompose.main.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,10 +25,12 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
 import com.example.whatsappcompose.core.domain.User
+import com.example.whatsappcompose.main.presentation.main.MainEvents
 
 @Composable
 fun Contacts(
-    users: List<User>
+    users: List<User>,
+    onEvent: (MainEvents.OnContactClick) -> Unit = { }
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -42,7 +45,10 @@ fun Contacts(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .clickable {
+                        onEvent(MainEvents.OnContactClick(user.name, user.photo))
+                    },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {

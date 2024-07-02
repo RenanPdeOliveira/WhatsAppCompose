@@ -9,6 +9,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.example.whatsappcompose.main.presentation.chat.ChatScreen
+import com.example.whatsappcompose.main.presentation.chat.ChatViewModel
 import com.example.whatsappcompose.main.presentation.main.MainScreen
 import com.example.whatsappcompose.main.presentation.main.MainViewModel
 import com.example.whatsappcompose.main.presentation.profile.ProfileScreen
@@ -49,6 +51,13 @@ fun NavGraphBuilder.mainNavGraph(
                 state = state,
                 nameState = args.name,
                 photoState = args.photo
+            )
+        }
+        composable<Screens.ChatScreen> {
+            val args = it.toRoute<Screens.ChatScreen>()
+            ChatScreen(
+                name = args.name,
+                photo = args.photo
             )
         }
     }

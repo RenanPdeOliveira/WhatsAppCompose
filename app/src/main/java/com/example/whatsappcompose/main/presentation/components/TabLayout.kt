@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.whatsappcompose.core.domain.User
+import com.example.whatsappcompose.main.presentation.main.MainEvents
 import kotlinx.coroutines.launch
 
 @Composable

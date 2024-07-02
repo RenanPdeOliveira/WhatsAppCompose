@@ -44,6 +44,12 @@ class MainViewModel @Inject constructor(
                     _uiEvent.send(UiEvent.Navigate(Screens.ProfileScreen(event.name, event.photo)))
                 }
             }
+
+            is MainEvents.OnContactClick -> {
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.Navigate(Screens.ChatScreen(event.name, event.photo)))
+                }
+            }
         }
     }
 
