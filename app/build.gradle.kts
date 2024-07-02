@@ -80,6 +80,9 @@ dependencies {
     // Coil
     implementation(libs.coil.android)
 
+    // Icons
+    implementation(libs.androidx.compose.icons)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

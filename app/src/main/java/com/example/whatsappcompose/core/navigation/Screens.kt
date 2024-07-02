@@ -16,5 +16,5 @@ sealed interface Screens {
     @Serializable
     data object MainScreen: Screens
     @Serializable
-    data object ProfileScreen: Screens
+    data class ProfileScreen(val name: String, val photo: String): Screens
 }

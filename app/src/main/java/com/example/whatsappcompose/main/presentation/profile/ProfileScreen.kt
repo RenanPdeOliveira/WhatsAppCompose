@@ -20,8 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -31,6 +31,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +48,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.whatsappcompose.R
+import com.example.whatsappcompose.core.presentation.components.ButtonOnceClick
+import com.example.whatsappcompose.core.presentation.components.LottieAuthLoading
+import com.example.whatsappcompose.core.presentation.components.ShowAlertDialog
 import com.example.whatsappcompose.core.presentation.components.TopAppBarNavigateBack
 import com.example.whatsappcompose.core.util.UiEvent
+import com.example.whatsappcompose.core.util.UiText
+import com.example.whatsappcompose.main.presentation.main.UserState
 import com.example.whatsappcompose.ui.theme.DarkGreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -60,16 +66,19 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
-    popBackStack: (UiEvent.PopBackStack) -> Unit,
     onNavigate: (UiEvent.Navigate) -> Unit,
+    onNavigateBack: (UiEvent.PopBackStack) -> Unit,
     onEvent: (ProfileEvents) -> Unit,
-    uiEvent: Flow<UiEvent>
+    uiEvent: Flow<UiEvent>,
+    state: State<UserState>,
+    nameState: String,
+    photoState: String
 ) {
     var name by remember {
-        mutableStateOf("")
+        mutableStateOf(nameState)
     }
     var photo by remember {
-        mutableStateOf("")
+        mutableStateOf(photoState)
     }
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -81,6 +90,9 @@ fun ProfileScreen(
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
+    var isDialogOpen by remember {
+        mutableStateOf(false)
+    }
     val galleryPermission =
         rememberPermissionState(permission = Manifest.permission.READ_MEDIA_IMAGES)
     val permissionResultLauncher = rememberLauncherForActivityResult(
@@ -88,11 +100,15 @@ fun ProfileScreen(
         onResult = { isGranted ->
             if (isGranted) {
                 scope.launch {
-                    snackBarHost.showSnackbar("Permissao aprovada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_permission_granted).toString()
+                    )
                 }
             } else {
                 scope.launch {
-                    snackBarHost.showSnackbar("Permissao negada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_permission_not_granted).toString()
+                    )
                 }
             }
         }
@@ -104,7 +120,9 @@ fun ProfileScreen(
                 photo = uri.toString()
             } else {
                 scope.launch {
-                    snackBarHost.showSnackbar("Nenhuma imagem selecionada")
+                    snackBarHost.showSnackbar(
+                        UiText.StringResource(R.string.snackbar_gallery_empty_photo).toString()
+                    )
                 }
             }
         }
@@ -114,7 +132,7 @@ fun ProfileScreen(
         uiEvent.collect { event ->
             when (event) {
                 UiEvent.PopBackStack -> {
-                    popBackStack(UiEvent.PopBackStack)
+                    onNavigateBack(UiEvent.PopBackStack)
                 }
 
                 is UiEvent.Navigate -> {
@@ -123,6 +141,10 @@ fun ProfileScreen(
 
                 is UiEvent.ShowSnackBar -> {
                     snackBarHost.showSnackbar(event.uiText.asString(context))
+                }
+
+                is UiEvent.ShowDialog -> {
+                    isDialogOpen = event.isOpen
                 }
 
                 UiEvent.OpenGallery -> {
@@ -136,109 +158,127 @@ fun ProfileScreen(
         }
     }
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHost)
-        },
-        topBar = {
-            TopAppBarNavigateBack(
-                title = stringResource(id = R.string.profile_toolbar_title),
-                onNavigationBack = {
-                    onEvent(ProfileEvents.OnNavigateBackClick)
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
+    if (!state.value.isLoading) {
+        Scaffold(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(200.dp)
-                        .clip(CircleShape),
-                    painter = painter,
-                    contentDescription = ""
+                .fillMaxSize(),
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHost)
+            },
+            topBar = {
+                TopAppBarNavigateBack(
+                    title = stringResource(id = R.string.profile_toolbar_title),
+                    onNavigationBack = {
+                        onEvent(ProfileEvents.OnNavigateBackClick)
+                    }
                 )
-                IconButton(
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(
                     modifier = Modifier
-                        .offset(70.dp, 70.dp)
-                        .clip(CircleShape)
-                        .background(Color.Black),
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .clip(CircleShape),
+                        painter = painter,
+                        contentDescription = ""
+                    )
+                    IconButton(
+                        modifier = Modifier
+                            .offset(70.dp, 70.dp)
+                            .clip(CircleShape)
+                            .background(DarkGreen),
+                        onClick = {
+                            onEvent(ProfileEvents.OnPhotoButtonClick)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.CameraAlt,
+                            tint = Color.White,
+                            contentDescription = ""
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = name,
+                    onValueChange = {
+                        name = it
+                    },
+                    label = {
+                        Text(text = stringResource(id = R.string.name_text_input))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Rounded.Person,
+                            tint = DarkGreen,
+                            contentDescription = ""
+                        )
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    )
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
+            ) {
+                ButtonOnceClick(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     onClick = {
-                        onEvent(ProfileEvents.OnPhotoButtonClick)
+                        onEvent(ProfileEvents.OnSaveButtonClick(name, photo))
                     }
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Person,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
+                    Text(text = stringResource(id = R.string.save_button))
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                ButtonOnceClick(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        onEvent(ProfileEvents.OnSignOutButtonClick())
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.sign_out_button))
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = name,
-                onValueChange = {
-                    name = it
+        }
+        if (isDialogOpen) {
+            ShowAlertDialog(
+                title = UiText.StringResource(R.string.dialog_title_sign_out),
+                text = UiText.StringResource(R.string.dialog_text_sign_out),
+                positiveText = UiText.StringResource(R.string.dialog_positive_text_sign_out),
+                negativeText = UiText.StringResource(R.string.dialog_negative_text_sign_out),
+                onPositiveButton = {
+                    onEvent(ProfileEvents.PositiveDialogButton())
                 },
-                label = {
-                    Text(text = stringResource(id = R.string.name_text_input))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Person,
-                        tint = DarkGreen,
-                        contentDescription = ""
-                    )
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                )
+                onNegativeButton = {
+                    onEvent(ProfileEvents.NegativeDialogButton())
+                }
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    onEvent(ProfileEvents.OnSaveButtonClick(name, photo))
-                }
-            ) {
-                Text(text = stringResource(id = R.string.save_button))
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    onEvent(ProfileEvents.OnSignOutButtonClick)
-                }
-            ) {
-                Text(text = stringResource(id = R.string.sign_out_button))
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+    } else {
+        LottieAuthLoading()
     }
 }

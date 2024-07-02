@@ -1,9 +1,9 @@
 package com.example.whatsappcompose.auth.data.repository
 
 import android.util.Log
-import com.example.whatsappcompose.auth.domain.AuthError
+import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +19,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val db: FirebaseFirestore
 ) : AuthRepository {
     override suspend fun login(
         email: String,
@@ -91,13 +91,13 @@ class AuthRepositoryImpl @Inject constructor(
 
     private fun addUser(id: String, name: String, email: String) {
         val user = User(id, name, email)
-        firestore.collection("users")
+        db.collection("users")
             .document(id)
             .set(user)
             .addOnSuccessListener {
-                Log.d("firestoreTest", "Dado incluido")
+                Log.d("Firestore", "Data added")
             }.addOnFailureListener {
-                Log.d("firestoreTest", "Dado nao incluido ${it.message}")
+                Log.d("Firestore", "Data not added ${it.message}")
             }
     }
 }

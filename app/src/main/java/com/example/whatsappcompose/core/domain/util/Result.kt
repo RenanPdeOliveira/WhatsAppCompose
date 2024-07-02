@@ -1,4 +1,4 @@
-package com.example.whatsappcompose.core.domain
+package com.example.whatsappcompose.core.domain.util
 
 typealias RootError = Error
 

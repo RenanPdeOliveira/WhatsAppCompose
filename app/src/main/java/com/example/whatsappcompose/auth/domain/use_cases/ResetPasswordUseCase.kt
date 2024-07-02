@@ -1,8 +1,8 @@
 package com.example.whatsappcompose.auth.domain.use_cases
 
-import com.example.whatsappcompose.auth.domain.AuthError
+import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.core.domain.util.Result
 import javax.inject.Inject
 
 class ResetPasswordUseCase @Inject constructor(

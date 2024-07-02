@@ -1,7 +1,7 @@
 package com.example.whatsappcompose.auth.domain.repository
 
-import com.example.whatsappcompose.auth.domain.AuthError
-import com.example.whatsappcompose.core.domain.Result
+import com.example.whatsappcompose.auth.domain.util.AuthError
+import com.example.whatsappcompose.core.domain.util.Result
 import com.google.firebase.auth.AuthResult
 
 interface AuthRepository {
