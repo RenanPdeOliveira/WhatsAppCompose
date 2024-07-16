@@ -12,14 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.example.whatsappcompose.R
-import com.example.whatsappcompose.core.presentation.components.TopAppBarActionMenu
+import com.example.whatsappcompose.core.presentation.components.TopAppBarChat
 
 @Composable
 fun ChatScreen(
     name: String,
-    photo: String
+    photo: String? = null
 ) {
     val snackBarHost = remember {
         SnackbarHostState()
@@ -31,10 +30,10 @@ fun ChatScreen(
             SnackbarHost(hostState = snackBarHost)
         },
         topBar = {
-            TopAppBarActionMenu(
+            TopAppBarChat(
                 title = name,
                 photo = photo,
-                onProfile = {
+                onNavigationBack = {
 
                 }
             )

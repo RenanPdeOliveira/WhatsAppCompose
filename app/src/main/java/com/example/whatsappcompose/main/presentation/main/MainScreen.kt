@@ -75,7 +75,7 @@ fun MainScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                TabLayout(state.value.users)
+                TabLayout(users = state.value.users, onEvent = onEvent)
             }
         }
     } else {

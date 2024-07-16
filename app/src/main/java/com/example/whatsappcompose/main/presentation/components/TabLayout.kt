@@ -24,7 +24,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TabLayout(
-    users: List<User>
+    users: List<User>,
+    onEvent: (MainEvents.OnContactClick) -> Unit
 ) {
     val state = rememberPagerState { 2 }
     val scope = rememberCoroutineScope()
@@ -63,12 +64,12 @@ fun TabLayout(
         when (index) {
             0 -> {
                 tabIndex = 0
-                Contacts(users)
+                Contacts(users, onEvent)
             }
 
             1 -> {
                 tabIndex = 1
-                Contacts(users)
+                Contacts(users, onEvent)
             }
         }
     }

@@ -30,7 +30,7 @@ import com.example.whatsappcompose.main.presentation.main.MainEvents
 @Composable
 fun Contacts(
     users: List<User>,
-    onEvent: (MainEvents.OnContactClick) -> Unit = { }
+    onEvent: (MainEvents.OnContactClick) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -47,7 +47,12 @@ fun Contacts(
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clickable {
-                        onEvent(MainEvents.OnContactClick(user.name, user.photo))
+                        onEvent(
+                            MainEvents.OnContactClick(
+                                user.name,
+                                user.photo.ifEmpty { null }
+                            )
+                        )
                     },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -56,7 +61,7 @@ fun Contacts(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(60.dp),
-                    painter = if (user.photo != "") painter else painterResource(id = R.drawable.logo_green),
+                    painter = if (user.photo != "") painter else painterResource(id = R.drawable.undraw_pic_profile_empty),
                     contentDescription = ""
                 )
                 Spacer(modifier = Modifier.width(8.dp))
