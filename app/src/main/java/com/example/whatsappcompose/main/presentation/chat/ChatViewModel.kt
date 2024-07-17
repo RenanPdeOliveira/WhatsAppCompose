@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.whatsappcompose.core.navigation.Screens
 import com.example.whatsappcompose.core.util.UiEvent
-import com.example.whatsappcompose.main.presentation.main.MainEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -16,16 +15,16 @@ class ChatViewModel @Inject constructor(
 
 ): ViewModel() {
 
-   /* private val _uiEvent = Channel<UiEvent>()
+    private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onEvent(event: ChatEvents) {
         when (event) {
-            is ChatEvents.OnContactClick -> {
+            is ChatEvents.OnNavigateBack -> {
                 viewModelScope.launch {
-                    _uiEvent.send(UiEvent.Navigate(Screens.ProfileScreen(event.name, event.photo)))
+                    _uiEvent.send(UiEvent.PopBackStack)
                 }
             }
         }
-    }*/
+    }
 }

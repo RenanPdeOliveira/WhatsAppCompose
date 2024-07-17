@@ -8,6 +8,7 @@ firebaseFirestore = "24.8.1"
 firebaseCloudStore = "20.2.1"
 navigationCompose = "2.8.0-alpha08"
 accompanist = "0.35.1-alpha"
+constraint = "1.0.1"
 coil = "2.6.0"
 hilt = "2.48"
 hiltNavigation = "1.2.0"
@@ -33,6 +34,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 hilt-android-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+constraint-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraint" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 coil-android = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
