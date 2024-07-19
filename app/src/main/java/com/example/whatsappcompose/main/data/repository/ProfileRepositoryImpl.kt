@@ -3,6 +3,7 @@ package com.example.whatsappcompose.main.data.repository
 import androidx.core.net.toUri
 import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
+import com.example.whatsappcompose.core.domain.constants.Constants
 import com.example.whatsappcompose.main.domain.util.ProfileError
 import com.example.whatsappcompose.main.domain.repository.ProfileRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -41,10 +42,10 @@ class ProfileRepositoryImpl @Inject constructor(
             val id = auth.currentUser?.uid
             id?.let {
                 storage
-                    .getReference("photos")
-                    .child("users")
+                    .getReference(Constants.PHOTOS)
+                    .child(Constants.USERS)
                     .child(id)
-                    .child("profile.jpg")
+                    .child(Constants.PROFILE_PATH)
                     .putFile(photo.toUri())
                     .addOnSuccessListener {
                         it.metadata?.reference?.downloadUrl
@@ -54,7 +55,7 @@ class ProfileRepositoryImpl @Inject constructor(
                                     "photo" to uri.toString()
                                 )
                                 db
-                                    .collection("users")
+                                    .collection(Constants.USERS)
                                     .document(id)
                                     .update(data)
                             }

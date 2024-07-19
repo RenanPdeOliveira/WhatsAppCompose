@@ -49,8 +49,9 @@ fun Contacts(
                     .clickable {
                         onEvent(
                             MainEvents.OnContactClick(
-                                user.name,
-                                user.photo.ifEmpty { null }
+                                userId = user.id,
+                                name = user.name,
+                                photo = user.photo.ifEmpty { null }
                             )
                         )
                     },

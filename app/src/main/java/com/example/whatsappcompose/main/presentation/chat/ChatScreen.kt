@@ -55,6 +55,7 @@ fun ChatScreen(
     onNavigateBack: (UiEvent.PopBackStack) -> Unit,
     onEvent: (ChatEvents) -> Unit,
     uiEvent: Flow<UiEvent>,
+    userId: String,
     name: String,
     photo: String? = null
 ) {
@@ -126,7 +127,7 @@ fun ChatScreen(
                     message = it
                 },
                 placeholder = {
-                    Text(text = "Message")
+                    Text(text = stringResource(id = R.string.message_text_input))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text
@@ -144,11 +145,18 @@ fun ChatScreen(
 
                 }
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.Send,
-                    tint = Color.White,
-                    contentDescription = ""
-                )
+                IconButton(
+                    onClick = {
+                        onEvent(ChatEvents.OnSendMessageClick(message, userId))
+                        message = ""
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.Send,
+                        tint = Color.White,
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }

@@ -4,6 +4,7 @@
     <string name="email_text_input">Email</string>
     <string name="name_text_input">Name</string>
     <string name="password_text_input">Password</string>
+    <string name="message_text_input">Message</string>
     <!-- Buttons -->
     <string name="forgot_password_button">Did you forget your password? Click here</string>
     <string name="login_button">Login</string>
@@ -35,7 +36,6 @@
     <string name="snackbar_permission_granted">Permission granted</string>
     <string name="snackbar_permission_not_granted">Permission not granted</string>
     <string name="snackbar_gallery_empty_photo">No image selected</string>
-
     <!-- Alert Dialog -->
     <string name="dialog_title_sign_out">Sign out</string>
     <string name="dialog_text_sign_out">Are you sure you want to sign out?</string>

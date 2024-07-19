@@ -2,6 +2,7 @@ package com.example.whatsappcompose.main.data.repository
 
 import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
+import com.example.whatsappcompose.core.domain.constants.Constants
 import com.example.whatsappcompose.main.domain.util.MainError
 import com.example.whatsappcompose.main.domain.repository.MainRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -19,14 +20,14 @@ class MainRepositoryImpl @Inject constructor(
         return callbackFlow {
             val id = auth.currentUser?.uid
             id?.let {
-                db.collection("users")
+                db.collection(Constants.USERS)
                     .document(id)
                     .get()
                     .addOnSuccessListener { document ->
                         val result = document.data
                         result?.let {
-                            val name = result["name"].toString()
-                            val photo = result["photo"].toString()
+                            val name = result[Constants.NAME].toString()
+                            val photo = result[Constants.PHOTO].toString()
                             trySend(Result.Success(data = User(name = name, photo = photo)))
                         }
                     }.addOnFailureListener {
@@ -43,7 +44,7 @@ class MainRepositoryImpl @Inject constructor(
         return callbackFlow {
             val id = auth.currentUser?.uid
             val users = mutableListOf<User>()
-            db.collection("users")
+            db.collection(Constants.USERS)
                 .addSnapshotListener { value, error ->
                     error?.let {
                         trySend(Result.Error(error = MainError.Exception.KOTLIN_EXCEPTION))

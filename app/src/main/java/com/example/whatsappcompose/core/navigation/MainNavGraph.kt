@@ -62,6 +62,7 @@ fun NavGraphBuilder.mainNavGraph(
                 },
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent,
+                userId = args.userId,
                 name = args.name,
                 photo = args.photo
             )

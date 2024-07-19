@@ -5,6 +5,7 @@ import com.example.whatsappcompose.auth.domain.util.AuthError
 import com.example.whatsappcompose.auth.domain.repository.AuthRepository
 import com.example.whatsappcompose.core.domain.util.Result
 import com.example.whatsappcompose.core.domain.User
+import com.example.whatsappcompose.core.domain.constants.Constants
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -91,7 +92,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     private fun addUser(id: String, name: String, email: String) {
         val user = User(id, name, email)
-        db.collection("users")
+        db.collection(Constants.USERS)
             .document(id)
             .set(user)
             .addOnSuccessListener {

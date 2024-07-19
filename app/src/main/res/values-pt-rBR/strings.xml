@@ -5,6 +5,7 @@
     <string name="email_text_input">Email</string>
     <string name="name_text_input">Nome</string>
     <string name="password_text_input">Senha</string>
+    <string name="message_text_input">Mensagem</string>
     <!-- Buttons -->
     <string name="forgot_password_button">Esqueceu a senha? Clique aqui</string>
     <string name="login_button">Entrar</string>
@@ -36,7 +37,6 @@
     <string name="snackbar_permission_granted">Permissão garantida</string>
     <string name="snackbar_permission_not_granted">Permissão não garantida</string>
     <string name="snackbar_gallery_empty_photo">Nenhuma imagem selecionada</string>
-
     <!-- Alert Dialog -->
     <string name="dialog_title_sign_out">Sair</string>
     <string name="dialog_text_sign_out">Você tem certeza que quer sair?</string>

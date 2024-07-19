@@ -1,7 +1,9 @@
 package com.example.whatsappcompose.main.di
 
+import com.example.whatsappcompose.main.data.repository.ChatRepositoryImpl
 import com.example.whatsappcompose.main.data.repository.MainRepositoryImpl
 import com.example.whatsappcompose.main.data.repository.ProfileRepositoryImpl
+import com.example.whatsappcompose.main.domain.repository.ChatRepository
 import com.example.whatsappcompose.main.domain.repository.MainRepository
 import com.example.whatsappcompose.main.domain.repository.ProfileRepository
 import dagger.Binds
@@ -21,4 +23,8 @@ abstract class MainRepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMainRepository(mainRepositoryImpl: MainRepositoryImpl): MainRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
 }
